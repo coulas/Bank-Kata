@@ -1,11 +1,15 @@
-package fr.arolla.katas.soge.persistence;
+package fr.arolla.katas.soge.account.persistence;
 
-import fr.arolla.katas.soge.account.*;
+import fr.arolla.katas.soge.account.domain.Account;
+import fr.arolla.katas.soge.account.domain.AccountType;
+import fr.arolla.katas.soge.account.domain.Amount;
+import fr.arolla.katas.soge.account.domain.Client;
+import fr.arolla.katas.soge.account.domain.AccountRepository;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static fr.arolla.katas.soge.account.AccountType.CHECKING;
+import static fr.arolla.katas.soge.account.domain.AccountType.CHECKING;
 
 /**
  * Created by Nicolas Fédou on 02/11/2016.
@@ -15,22 +19,18 @@ public class TransientAccountRepository implements AccountRepository {
     // deserves an internal AccountCache class
     private Map<Client, Map<AccountType, Account>> accounts = new HashMap();
 
-    public Account createLightCheckingAccount(String name, int euros, int cents) {
+    public Account createLightCheckingAccount(String name, double euros) {
         Client client = findClientByName(name);
         if (client == null) {
             client = createLightClient(name);
         }
-        return createLightCheckingAccount(client, createEuroAmount(euros, cents));
+        return createLightCheckingAccount(client, Amount.getEuroAmountFromEuros(euros));
     }
 
     public Client createLightClient(String name) {
         Client client = new Client(name);
         clients.put(name, client);
         return client;
-    }
-
-    public Amount createEuroAmount(int euros, int cents) {
-        return Amount.getEuroAmountFrom(euros, cents);
     }
 
     public void saveTransactionResult(Account account) {
@@ -54,8 +54,8 @@ public class TransientAccountRepository implements AccountRepository {
         return clients.get(name);
     }
 
-    public Account findCheckingAccountForClient(Client client) {
-        Map<AccountType, Account> accountTypeAccountMap = accounts.get(client);
+    public Account findCheckingAccountForClientByName(String name) {
+        Map<AccountType, Account> accountTypeAccountMap = accounts.get(findClientByName(name));
         // that is why we need a class (cf demeter)
         Account account = accountTypeAccountMap.get(CHECKING);
         return account;

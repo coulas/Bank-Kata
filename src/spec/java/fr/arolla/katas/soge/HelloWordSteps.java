@@ -25,5 +25,4 @@ public class HelloWordSteps {
     public void cucmber_says(String arg1) throws Throwable {
         System.out.println("Easy to understand, not so to setup");
     }
-
 }
