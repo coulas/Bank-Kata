@@ -14,5 +14,7 @@ public interface AccountRepository {
 
     Client findClientByName(String name);
 
-    Amount createAmount(int euros, int cents);
+    Amount createEuroAmount(int euros, int cents);
+
+    void saveTransactionResult(Account account);
 }

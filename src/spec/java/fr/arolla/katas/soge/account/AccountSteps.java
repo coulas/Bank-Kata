@@ -23,9 +23,11 @@ public class AccountSteps {
 
     @When("^he withdraws (\\d+)\\.(\\d+) EUR from his account$")
     public void he_withdraws_EUR_from_his_account(int euros, int cents) throws Throwable {
-        Amount amount = accountRepository.createAmount(euros, cents);
+        // All this algo is a service/application layer algorithm
+        Amount amount = accountRepository.createEuroAmount(euros, cents);
         Account account = accountRepository.findCheckingAccountForClient(accountRepository.findClientByName(name));
-        //account.withdraw(amount);
+        Account accountResult = account.withdraw(amount);
+        accountRepository.saveTransactionResult(accountResult);
     }
 
     @Then("^the new balance is (\\d+)\\.(\\d+) EUR$")

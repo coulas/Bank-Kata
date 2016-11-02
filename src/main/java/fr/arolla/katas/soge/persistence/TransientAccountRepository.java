@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static fr.arolla.katas.soge.account.AccountType.CHECKING;
-import static fr.arolla.katas.soge.account.Amount.Devise.EURO;
 
 /**
  * Created by Nicolas Fédou on 02/11/2016.
@@ -21,7 +20,7 @@ public class TransientAccountRepository implements AccountRepository {
         if (client == null) {
             client = createLightClient(name);
         }
-        return createLightCheckingAccount(client, createAmount(euros, cents));
+        return createLightCheckingAccount(client, createEuroAmount(euros, cents));
     }
 
     public Client createLightClient(String name) {
@@ -30,8 +29,13 @@ public class TransientAccountRepository implements AccountRepository {
         return client;
     }
 
-    public Amount createAmount(int euros, int cents) {
-        return new Amount(euros, cents, EURO);
+    public Amount createEuroAmount(int euros, int cents) {
+        return Amount.getEuroAmountFrom(euros, cents);
+    }
+
+    public void saveTransactionResult(Account account) {
+        Map<AccountType, Account> accountsForClient = accounts.get(account.client());
+        accountsForClient.put(account.type(), account);
     }
 
     public Account createLightCheckingAccount(Client client, Amount amount) {
@@ -51,8 +55,8 @@ public class TransientAccountRepository implements AccountRepository {
     }
 
     public Account findCheckingAccountForClient(Client client) {
-        // that is why we need a class (cf demeter)
         Map<AccountType, Account> accountTypeAccountMap = accounts.get(client);
+        // that is why we need a class (cf demeter)
         Account account = accountTypeAccountMap.get(CHECKING);
         return account;
     }

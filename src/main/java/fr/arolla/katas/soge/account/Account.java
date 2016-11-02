@@ -18,4 +18,13 @@ public class Account {
     public AccountType type() {
         return type;
     }
+
+    public Account withdraw(Amount amount) {
+        Amount newAmount = balance.withdraw(amount);
+        return new Account(client, newAmount, type);
+    }
+
+    public Client client() {
+        return client;
+    }
 }
