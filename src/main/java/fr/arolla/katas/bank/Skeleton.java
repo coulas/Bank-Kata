@@ -1,4 +1,4 @@
-package fr.arolla.katas.soge;
+package fr.arolla.katas.bank;
 
 /**
  * Created by Nicolas Fédou on 24/10/2016.

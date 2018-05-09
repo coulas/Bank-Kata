@@ -1,4 +1,4 @@
-package fr.arolla.katas.soge;
+package fr.arolla.katas.bank;
 
 import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
